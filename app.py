@@ -1,4 +1,15 @@
 import os
+
+# Configure folder paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Redirect temporary file storage to F:/ObjectDetectionAI/temp (avoids C: drive full errors)
+TEMP_DIR = os.path.join(BASE_DIR, 'temp')
+os.makedirs(TEMP_DIR, exist_ok=True)
+os.environ['TEMP'] = TEMP_DIR
+os.environ['TMP'] = TEMP_DIR
+os.environ['TMPDIR'] = TEMP_DIR
+
 import time
 import json
 import sqlite3
@@ -15,8 +26,6 @@ from ultralytics import YOLO
 # Initialize Flask application
 app = Flask(__name__)
 
-# Configure folder paths
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
 OUTPUT_FOLDER = os.path.join(BASE_DIR, 'static', 'outputs')
 DATABASE_PATH = os.path.join(BASE_DIR, 'database', 'detection.db')
