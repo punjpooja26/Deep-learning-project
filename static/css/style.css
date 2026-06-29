@@ -207,6 +207,8 @@ body {
 }
 
 .preview-image {
+    max-width: 100%;
+    height: auto;
     max-height: 380px;
     border-radius: 12px;
     object-fit: contain;
