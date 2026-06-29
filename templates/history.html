@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History - ObjectDetectAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <div class="dashboard-wrapper">
+        <aside class="sidebar glass-panel">
+            <div>
+                <a class="sidebar-brand text-white text-decoration-none" href="/">
+                    <i class="fas fa-brain text-cyan"></i>
+                    <span>ObjectDetect<span class="text-cyan">AI</span></span>
+                </a>
+                
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="/dashboard" class="sidebar-link">
+                            <i class="fas fa-desktop"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/history" class="sidebar-link active">
+                            <i class="fas fa-history"></i>
+                            <span>History</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/stats" class="sidebar-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" class="sidebar-link">
+                            <i class="fas fa-home"></i>
+                            <span>Home Page</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-footer border-t border-secondary-subtle pt-4">
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="text-muted"><i class="fas fa-adjust me-2"></i>Theme Mode</span>
+                    <div class="form-check form-switch m-0">
+                        <input class="form-check-input" type="checkbox" id="theme-toggle">
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+                <div>
+                    <h1 class="font-heading font-bold text-white mb-1">Detection History</h1>
+                    <p class="text-muted mb-0">Browse, filter, and review historical image classifications</p>
+                </div>
+            </header>
+
+            <div class="glass-panel p-4 mb-4">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-9">
+                        <div class="position-relative">
+                            <i class="fas fa-search position-absolute top-50 translate-middle-y start-0 ms-3 text-muted"></i>
+                            <input type="text" id="search-input" class="w-full glass-input ps-5" placeholder="Search by detected object name (e.g. cat, bottle, person)...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-glass w-100" id="btn-refresh-history">
+                            <i class="fas fa-sync-alt me-2"></i>Refresh List
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-4">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle border-secondary-subtle">
+                        <thead>
+                            <tr class="border-secondary-subtle">
+                                <th scope="col" style="background-color: transparent">Upload Date</th>
+                                <th scope="col" style="background-color: transparent">Original Preview</th>
+                                <th scope="col" style="background-color: transparent">Detected Output</th>
+                                <th scope="col" style="background-color: transparent">Model</th>
+                                <th scope="col" style="background-color: transparent">Objects Count</th>
+                                <th scope="col" style="background-color: transparent">Avg Confidence</th>
+                                <th scope="col" style="background-color: transparent" class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-rows">
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-5">
+                                    <i class="fas fa-circle-notch fa-spin fs-3 text-cyan mb-2"></i><br>
+                                    Loading history logs...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content glass-panel text-white">
+                <div class="modal-header border-bottom border-secondary-subtle">
+                    <h5 class="modal-title" id="detail-modal-title"><i class="fas fa-info-circle text-cyan me-2"></i>Inference Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-6 text-center">
+                            <h6 class="text-muted mb-2">Original Image</h6>
+                            <img id="detail-orig-image" class="w-100 rounded-3 border border-secondary-subtle" style="max-height: 400px; object-fit: contain; background: #000" src="" alt="Original">
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <h6 class="text-muted mb-2">Predicted Detections</h6>
+                            <img id="detail-pred-image" class="w-100 rounded-3 border border-secondary-subtle" style="max-height: 400px; object-fit: contain; background: #000" src="" alt="Detections">
+                        </div>
+                    </div>
+                    <div class="row mt-4 g-3">
+                        <div class="col-md-4">
+                            <div class="glass-panel p-3">
+                                <span class="text-muted text-xs block">Model Configuration</span>
+                                <div class="fs-5 font-bold text-white mt-1" id="detail-model-name">-</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-panel p-3">
+                                <span class="text-muted text-xs block">Objects Count</span>
+                                <div class="fs-5 font-bold text-white mt-1" id="detail-objects-count">-</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-panel p-3">
+                                <span class="text-muted text-xs block">Average Confidence</span>
+                                <div class="fs-5 font-bold text-white mt-1" id="detail-avg-confidence">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary-subtle">
+                    <button type="button" class="btn btn-glass" data-bs-dismiss="modal">Close</button>
+                    <a id="btn-download-detail" href="#" class="btn btn-glow" download><i class="fas fa-download me-2"></i>Download Image</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const historyRows = document.getElementById('history-rows');
+            const searchInput = document.getElementById('search-input');
+            const btnRefresh = document.getElementById('btn-refresh-history');
+            
+            let detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+            let allRecords = [];
+
+            async function loadHistory() {
+                historyRows.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <i class="fas fa-circle-notch fa-spin fs-3 text-cyan mb-2"></i><br>
+                            Loading history logs...
+                        </td>
+                    </tr>
+                `;
+                
+                try {
+                    const searchVal = searchInput.value.trim();
+                    const res = await fetch(`/api/history?q=${encodeURIComponent(searchVal)}`);
+                    if (!res.ok) throw new Error('Failed to fetch history');
+                    
+                    allRecords = await res.json();
+                    renderHistoryTable(allRecords);
+                } catch (err) {
+                    console.error(err);
+                    historyRows.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center text-danger py-5">
+                                <i class="fas fa-exclamation-triangle fs-3 mb-2"></i><br>
+                                Error fetching history records.
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+
+            function renderHistoryTable(records) {
+                if (records.length === 0) {
+                    historyRows.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-5">
+                                <i class="fas fa-history fs-3 mb-2 text-cyan"></i><br>
+                                No history logs found.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                historyRows.innerHTML = '';
+                records.forEach(r => {
+                    const uniqueLabels = [...new Set(r.objects_list.map(o => o.name))];
+                    const labelBadgeText = uniqueLabels.slice(0, 3).map(l => `<span class="badge bg-secondary rounded-pill me-1">${l}</span>`).join('');
+                    const overflowText = uniqueLabels.length > 3 ? `<span class="text-muted text-xs">+${uniqueLabels.length - 3} more</span>` : '';
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-secondary-subtle';
+                    tr.style.backgroundColor = 'transparent';
+                    tr.innerHTML = `
+                        <td>${r.created_at}</td>
+                        <td>
+                            <img src="${r.filename}" class="rounded" style="width: 50px; height: 50px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1)">
+                        </td>
+                        <td>
+                            <img src="${r.output_filename}" class="rounded" style="width: 50px; height: 50px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1)">
+                        </td>
+                        <td><span class="badge bg-opacity-10 bg-cyan text-cyan border border-cyan border-opacity-25">${r.model_name}</span></td>
+                        <td>
+                            <span class="font-bold text-white me-2">${r.objects_count}</span>
+                            ${labelBadgeText} ${overflowText}
+                        </td>
+                        <td><strong class="text-cyan">${r.average_confidence}%</strong></td>
+                        <td class="text-end">
+                            <button class="btn btn-glass btn-sm me-2 btn-view" data-id="${r.id}"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-danger btn-sm btn-delete" data-id="${r.id}"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    `;
+                    historyRows.appendChild(tr);
+                });
+
+                document.querySelectorAll('.btn-view').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.currentTarget.getAttribute('data-id');
+                        const record = allRecords.find(item => item.id == id);
+                        if (record) {
+                            showRecordDetails(record);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.getAttribute('data-id');
+                        if (confirm('Are you sure you want to delete this detection record?')) {
+                            try {
+                                const res = await fetch(`/api/history/${id}`, { method: 'DELETE' });
+                                if (!res.ok) throw new Error('Failed to delete record');
+                                showToast('Record deleted successfully', 'success');
+                                loadHistory();
+                            } catch (err) {
+                                console.error(err);
+                                showToast('Error deleting history record', 'danger');
+                            }
+                        }
+                    });
+                });
+            }
+
+            function showRecordDetails(r) {
+                document.getElementById('detail-modal-title').innerHTML = `<i class="fas fa-info-circle text-cyan me-2"></i>Inference Details — Record #${r.id}`;
+                document.getElementById('detail-orig-image').src = r.filename;
+                document.getElementById('detail-pred-image').src = r.output_filename;
+                document.getElementById('detail-model-name').textContent = r.model_name;
+                document.getElementById('detail-objects-count').textContent = `${r.objects_count} objects`;
+                document.getElementById('detail-avg-confidence').textContent = `${r.average_confidence}%`;
+                document.getElementById('btn-download-detail').href = r.output_filename;
+                
+                detailModal.show();
+            }
+
+            btnRefresh.addEventListener('click', () => loadHistory());
+            
+            let searchTimeout = null;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    loadHistory();
+                }, 400);
+            });
+
+            loadHistory();
+        });
+    </script>
+</body>
+</html>

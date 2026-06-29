@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Object Detection Web Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body class="hero-gradient">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent border-bottom border-secondary-subtle py-3 px-lg-5">
+        <div class="container-fluid">
+            <a class="navbar-brand sidebar-brand" href="/">
+                <i class="fas fa-brain text-cyan"></i>
+                <span class="text-white">ObjectDetect<span class="text-cyan">AI</span></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-white active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="/history">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="/stats">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-glass px-4" href="/dashboard"><i class="fas fa-arrow-right me-2"></i>Launch App</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="container py-5 my-5 text-center position-relative">
+        <div class="row justify-content-center py-5">
+            <div class="col-lg-10">
+                <div class="badge bg-opacity-10 bg-cyan text-cyan border border-cyan border-opacity-25 px-3 py-2 rounded-pill mb-4" style="background-color: rgba(0,242,254,0.1)">
+                    <i class="fas fa-magic me-2"></i>Powered by YOLOv8 Deep Learning
+                </div>
+                <h1 class="display-3 font-heading font-bold text-white mb-4">
+                    Detect & Classify Objects in <br>
+                    <span class="title-glow text-cyan italic font-light">Real-Time.</span>
+                </h1>
+                <p class="lead text-muted max-w-2xl mx-auto mb-5">
+                    Experience state-of-the-art computer vision. Upload static images or capture live camera feeds to isolate, label, and analyze objects instantly with confidence scores.
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="/dashboard" class="btn btn-glow px-5 py-3"><i class="fas fa-play me-2"></i>Go to Dashboard</a>
+                    <a href="#features" class="btn btn-glass px-5 py-3">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="container py-5 my-5">
+        <div class="text-center mb-5">
+            <h2 class="h1 text-white mb-3">Core Application Features</h2>
+            <p class="text-muted">Equipped with powerful utilities to run data science experiments on image intelligence.</p>
+        </div>
+        <div class="row g-4 mt-4">
+            <div class="col-md-4">
+                <div class="glass-panel p-5 h-100">
+                    <div class="fs-1 text-cyan mb-4"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <h3 class="h4 text-white mb-3">Multi-Format Upload</h3>
+                    <p class="text-muted">Drag and drop standard JPG, JPEG, and PNG images. Instantly preview, remove, or run analysis in one click.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-panel p-5 h-100">
+                    <div class="fs-1 text-cyan mb-4"><i class="fas fa-camera"></i></div>
+                    <h3 class="h4 text-white mb-3">Webcam Detections</h3>
+                    <p class="text-muted">Snap snapshots or initiate continuous live frame tracking to visualize bounding boxes over dynamic video feeds.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-panel p-5 h-100">
+                    <div class="fs-1 text-cyan mb-4"><i class="fas fa-chart-bar"></i></div>
+                    <h3 class="h4 text-white mb-3">Statistics Dashboard</h3>
+                    <p class="text-muted">Analyze inference speeds, object class distributions, and history search logs with interactive Chart.js widgets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-top border-secondary-subtle py-4 text-center mt-5">
+        <p class="text-muted mb-0">© 2026 ObjectDetectAI. Built with Flask, OpenCV, & YOLOv8.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
